@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripNext Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #f97316; /* Orange */
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left {
+            display: flex;
+            align-items: flex-end;
+        }
+        .header-right {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .search-container input[type="text"] {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+        .search-container button {
+            padding: 10px;
+            background-color: #f97316;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .content-container {
+            padding: 20px;
+            margin-top: 0; /* Adjusted margin */
+        }
+        .box-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Spacing between boxes */
+        }
+        .box {
+            background-color: white;
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+            text-align: left; /* Left-aligned text */
+            border-radius: 10px; /* Softened borders */
+        }
+        .box img {
+            width: 100%;
+            border-radius: 10px; /* Softened corners for images */
+        }
+        .button-container {
+            text-align: center; /* Centered button */
+            margin-top: 10px;
+        }
+        .box button {
+            background-color: #f97316; /* Button color matching header */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .footer {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <h1>TripNext Dashboard</h1>
+        </div>
+        <div class="header-right">
+            <a href="contact.html" style="color: white;">Contact Us</a>
+        </div>
+    </div>
+    <div class="search-container">
+        <input type="text" placeholder="Search...">
+        <button>Search</button>
+    </div>
+    <div class="heading">
+       <h2><b>Places to Visit</b></h2> 
+    </div>
+    <div class="content-container">
+        <div class="box-container">
+            <div class="box">
+                <h2>Agra</h2>
+                <img src="shan-elahi-DDiLYt_F88w-unsplash.jpg" alt="Agra Image">
+                <p>Did you know? Agra is home to the magnificent Taj Mahal, one of the Seven Wonders of the World. Built by Emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal, this marble masterpiece attracts millions of visitors each year. Agra’s rich history, stunning Mughal architecture, and vibrant culture make it a must-visit destination!</p>
+                <div class="button-container">
+                    <button>Learn More</button>
+                </div>
+            </div>
+            <div class="box">
+                <h2>Kerala</h2>
+                <img src="dileep-m-rv5ddI1WyCw-unsplash.jpg" alt="Kerala Image">
+                <p>Known as "God's Own Country," Kerala is famous for its lush greenery, serene backwaters, and diverse wildlife. This southwestern state is a haven for nature lovers and adventure seekers alike. With its rich cultural heritage, traditional dance forms like Kathakali, and delectable cuisine, Kerala offers a unique and enchanting experience for every traveler.</p>
+                <div class="button-container">
+                    <button>Learn More</button>
+                </div>
+            </div>
+            <div class="box">
+                <h2>Mumbai</h2>
+                <img src="parth-vyas-J4Ui2ch3oRU-unsplash.jpg" alt="Mumbai Image">
+                <p>Mumbai, the financial capital of India, is known for its fast-paced lifestyle, iconic landmarks like the Gateway of India, and Bollywood, the world's largest film industry. From bustling markets to serene marine drives, Mumbai offers a dynamic mix of culture, history, and modernity.</p>
+                <div class="button-container">
+                    <button>Learn More</button>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    <div class="footer">
+        <p>@TripNext     </p>
+    </div>
+</body>
+</html>
+
+
+
