@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+  </head>
+  <body
+    class="bg-cover bg-center h-screen flex items-center justify-center text-white"
+    style="background-image: url('loginBG.jpg')"
+  >
+    <div
+      class="bg-gray-900 bg-opacity-70 p-8 rounded-lg shadow-2xl text-center w-96"
+    >
+      <h2 class="text-4xl font-bold mb-4 text-yellow-400">Welcome!</h2>
+      <p class="text-lg mb-4 text-gray-300">Sign in or create an account</p>
+
+      <input
+        type="email"
+        id="email"
+        class="p-3 border-none rounded w-full text-black text-center focus:outline-none mb-3"
+        placeholder="Enter your email"
+      />
+      <input
+        type="password"
+        id="password"
+        class="p-3 border-none rounded w-full text-black text-center focus:outline-none mb-3"
+        placeholder="Enter your password"
+      />
+
+      <button
+        onclick="login()"
+        class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg text-lg font-semibold w-full"
+      >
+        Login
+      </button>
+      <button
+        onclick="register()"
+        class="mt-2 bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold w-full"
+      >
+        Register
+      </button>
+      <button
+        onclick="googleSignIn()"
+        class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold w-full"
+      >
+        Sign in with Google
+      </button>
+
+      <p id="message" class="mt-4 text-red-400"></p>
+    </div>
+
+    <script type="module">
+      // ✅ Import Firebase Modules Correctly
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        GoogleAuthProvider,
+        signInWithPopup,
+      } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+      // ✅ Firebase Config (Your project details)
+      const firebaseConfig = {
+        apiKey: "AIzaSyAA5SAzBOguCIBwr6U9Lw-SGwH5Z90oe0s",
+        authDomain: "travel-website-login-page.firebaseapp.com",
+        projectId: "travel-website-login-page",
+        storageBucket: "travel-website-login-page.appspot.com",
+        messagingSenderId: "455474636612",
+        appId: "1:455474636612:web:7bddfe06b6e2d859589911",
+        measurementId: "G-YJD8LYMXXL",
+      };
+
+      // ✅ Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      // ✅ Email/Password Login
+      async function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        try {
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          localStorage.setItem("userEmail", userCredential.user.email);
+          window.location.href = "landing.html";
+        } catch (error) {
+          document.getElementById("message").innerText = error.message;
+        }
+      }
+
+      // ✅ Register New User
+      async function register() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          document.getElementById("message").innerText =
+            "Account created successfully! Please login.";
+        } catch (error) {
+          document.getElementById("message").innerText = error.message;
+        }
+      }
+
+      // ✅ Google Sign-In
+      async function googleSignIn() {
+        try {
+          const result = await signInWithPopup(auth, provider);
+          localStorage.setItem("userEmail", result.user.email);
+          window.location.href = "landing.html";
+        } catch (error) {
+          document.getElementById("message").innerText = error.message;
+        }
+      }
+
+      // ✅ Attach functions to global scope (so buttons work)
+      window.login = login;
+      window.register = register;
+      window.googleSignIn = googleSignIn;
+    </script>
+  </body>
+</html>
