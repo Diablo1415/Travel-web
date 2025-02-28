@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TripNext - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/chatbot.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
@@ -36,7 +37,7 @@
                         <i class="fas fa-search"></i>
                         <span>Search All</span>
                     </button>
-                    <button class="px-4 py-2 m-1 flex items-center space-x-2 hover:text-orange-500">
+                    <button id="hotelBtn" class="px-4 py-2 m-1 flex items-center space-x-2 hover:text-orange-500">
                         <i class="fas fa-hotel"></i>
                         <span>Hotels</span>
                     </button>
@@ -46,7 +47,7 @@
                         <i class="fas fa-utensils"></i>
                         <span>Restaurants</span>
                     </button>
-                    <button class="px-4 py-2 m-1 flex items-center space-x-2 hover:text-orange-500">
+                    <button id="flightBtn" class="px-4 py-2 m-1 flex items-center space-x-2 hover:text-orange-500">
                         <i class="fas fa-plane"></i>
                         <span>Flights</span>
                     </button>
@@ -97,7 +98,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Kerala Card -->
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('Kerala.jpg')"></div>
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('kerala.jpg')"></div>
                     <div class="p-4">
                         <h4 class="font-bold text-xl mb-2">Kerala</h4>
                         <p class="text-gray-700 mb-4">Known as "God's Own Country," Kerala is famous for its lush greenery, serene backwaters, and diverse wildlife. This southwestern state is a haven for nature lovers and adventure seekers alike. With its rich cultural heritage, traditional dance forms like Kathakali, and delectable cuisine, Kerala offers a unique and enchanting experience for every traveler.</p>
@@ -110,7 +111,7 @@
                 
                 <!-- Agra Card -->
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('Agra.jpg')"></div>
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('agra.jpg')"></div>
                     <div class="p-4">
                         <h4 class="font-bold text-xl mb-2">Agra</h4>
                         <p class="text-gray-700 mb-4">Did you know? Agra is home to the magnificent Taj Mahal, one of the Seven Wonders of the World. Built by Emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal, this marble masterpiece attracts millions of visitors each year. Agra’s rich history, stunning Mughal architecture, and vibrant culture make it a must-visit destination!</p>
@@ -123,7 +124,7 @@
                 
                 <!-- Mumbai Card -->
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('Mumbai.jpg')"></div>
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('mumbai.jpg')"></div>
                     <div class="p-4">
                         <h4 class="font-bold text-xl mb-2">Mumbai</h4>
                         <p class="text-gray-700 mb-4">Mumbai, the financial capital of India, is known for its fast-paced lifestyle, iconic landmarks like the Gateway of India, and Bollywood, the world's largest film industry. From bustling markets to serene marine drives, Mumbai offers a dynamic mix of culture, history, and modernity.</p>
@@ -159,6 +160,16 @@
             appId: "1:455474636612:web:7bddfe06b6e2d859589911",
             measurementId: "G-YJD8LYMXXL",
         };
+
+        //flight button action
+        document.getElementById('flightBtn').addEventListener('click', function() {
+          window.location.href = "flights.html";
+        });
+
+        //hotel button action
+        document.getElementById('hotelBtn').addEventListener('click', function() {
+          window.location.href = "hotels.html";
+        });
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
