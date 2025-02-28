@@ -201,7 +201,11 @@ setInterval(changeBackground, 3700);
         document.getElementById('exploreBtn').addEventListener('click', function() {
           window.location.href = "dashboard19.html";
         });
-        
+
+        // Setup book now button
+        document.getElementById('bookBtn').addeventListener('click', function() {
+          window.location.href = "personalized.html";
+        });
         // Setup geolocation detection
         document.getElementById('detectLocationBtn').addEventListener('click', detectCurrentLocation);
       });
