@@ -75,7 +75,7 @@
 
           <!-- Date Range Picker -->
           <div>
-            <label class="block text-gray-700 text-sm font-bold mb-2">Travel Dates</label>
+            <label class="block text-gray-700 text-sm font-bold mb-2">Duration</label>
             <input
               type="text"
               id="dateRange"
@@ -104,34 +104,6 @@
         </div>
       </div>
       
-      <!-- Featured Destinations Section -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <div class="bg-white bg-opacity-90 rounded-lg overflow-hidden shadow-lg">
-          <div class="h-40 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=Paris')"></div>
-          <div class="p-4 text-black">
-            <h3 class="font-bold text-xl mb-2">Paris</h3>
-            <p class="text-gray-700">Experience the city of love and lights.</p>
-          </div>
-        </div>
-        
-        <div class="bg-white bg-opacity-90 rounded-lg overflow-hidden shadow-lg">
-          <div class="h-40 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=Tokyo')"></div>
-          <div class="p-4 text-black">
-            <h3 class="font-bold text-xl mb-2">Tokyo</h3>
-            <p class="text-gray-700">Discover the perfect blend of tradition and modernity.</p>
-          </div>
-        </div>
-        
-        <div class="bg-white bg-opacity-90 rounded-lg overflow-hidden shadow-lg">
-          <div class="h-40 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=New+York')"></div>
-          <div class="p-4 text-black">
-            <h3 class="font-bold text-xl mb-2">New York</h3>
-            <p class="text-gray-700">Explore the vibrant city that never sleeps.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <script type="module">
       // Import Firebase Modules
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
@@ -149,7 +121,7 @@
       let index = 0;
 
       function changeBackground() {
-      document.body.style.backgroundImage = `url('${images[index]}')`;
+      document.body.style.backgroundImage = url('${images[index]}');
       document.body.style.backgroundSize = "cover"; // Ensure background covers the screen
       document.body.style.backgroundPosition = "center"; // Keep it centered
       document.body.style.transition = "background-image 1s ease-in-out"; // Smooth transition
@@ -183,7 +155,7 @@ setInterval(changeBackground, 3700);
           // User is signed in, show email
           document.getElementById(
             "greeting"
-          ).innerText = `Welcome, ${user.email}`;
+          ).innerText = Welcome, ${user.email};
         } else {
           // No user is signed in, redirect to login page
           window.location.href = "index.html";
