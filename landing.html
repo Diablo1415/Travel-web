@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TripNext</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Date Range Picker Dependencies -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+      .pac-container {
+        z-index: 1051 !important;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-cover bg-center min-h-screen flex flex-col items-center justify-center text-white relative"
+    style="background-image: url('img1.jpg')"
+  >
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+    <!-- Show Logged-in User -->
+    <div id="greeting" class="absolute top-4 left-4 text-lg font-semibold z-10">
+      Checking login...
+    </div>
+
+    <!-- Logout Button -->
+    <button
+      onclick="logout()"
+      class="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg z-10"
+    >
+      Logout
+    </button>
+
+    <div class="relative text-center z-10 w-full max-w-4xl px-4">
+      <h1 class="text-4xl font-bold mb-6">Plan Your Perfect Trip</h1>
+      
+      <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg text-black mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <!-- Source Location -->
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2">From</label>
+            <div class="flex mb-1">
+              <input
+                type="text"
+                id="sourceLocation"
+                class="w-full p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter source location..."
+              />
+              <button
+                id="detectLocationBtn"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-r-lg"
+                title="Detect my location"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+            </div>
+            <div id="locationStatus" class="text-xs text-gray-500 h-4"></div>
+          </div>
+
+          <!-- Destination Location -->
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2">To</label>
+            <input
+              type="text"
+              id="destinationLocation"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter destination..."
+            />
+          </div>
+
+          <!-- Date Range Picker -->
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2">Travel Dates</label>
+            <input
+              type="text"
+              id="dateRange"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Select dates..."
+              readonly
+            />
+          </div>
+        </div>
+        
+        <!-- Search Button -->
+        <div class="mt-6">
+          <button
+            id="searchBtn"
+            class="w-full bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg rounded-lg font-bold transition-colors"
+          >
+            Find Your Adventure
+          </button>
+          <br> <br>
+          <button
+            id="exploreBtn"
+            class="w-full bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg rounded-lg font-bold transition-colors"
+          >
+            Explore
+          </button>
+        </div>
+      </div>
+      
+      <!-- Featured Destinations Section -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div class="bg-white bg-opacity-90 rounded-lg overflow-hidden shadow-lg">
+          <div class="h-40 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=Paris')"></div>
+          <div class="p-4 text-black">
+            <h3 class="font-bold text-xl mb-2">Paris</h3>
+            <p class="text-gray-700">Experience the city of love and lights.</p>
+          </div>
+        </div>
+        
+        <div class="bg-white bg-opacity-90 rounded-lg overflow-hidden shadow-lg">
+          <div class="h-40 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=Tokyo')"></div>
+          <div class="p-4 text-black">
+            <h3 class="font-bold text-xl mb-2">Tokyo</h3>
+            <p class="text-gray-700">Discover the perfect blend of tradition and modernity.</p>
+          </div>
+        </div>
+        
+        <div class="bg-white bg-opacity-90 rounded-lg overflow-hidden shadow-lg">
+          <div class="h-40 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=New+York')"></div>
+          <div class="p-4 text-black">
+            <h3 class="font-bold text-xl mb-2">New York</h3>
+            <p class="text-gray-700">Explore the vibrant city that never sleeps.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      // Import Firebase Modules
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+      //slideshow
+      const images = [
+      "img1.jpg", "img2.jpg", "img3.jpg", "img4.jpg"
+        ];
+
+      let index = 0;
+
+      function changeBackground() {
+      document.body.style.backgroundImage = `url('${images[index]}')`;
+      document.body.style.backgroundSize = "cover"; // Ensure background covers the screen
+      document.body.style.backgroundPosition = "center"; // Keep it centered
+      document.body.style.transition = "background-image 1s ease-in-out"; // Smooth transition
+      index = (index + 1) % images.length;
+}
+
+// Set initial background
+changeBackground();
+
+// Change background every 5 seconds
+setInterval(changeBackground, 3700);
+
+      // Firebase Config (Same as login page)
+      const firebaseConfig = {
+        apiKey: "AIzaSyAA5SAzBOguCIBwr6U9Lw-SGwH5Z90oe0s",
+        authDomain: "travel-website-login-page.firebaseapp.com",
+        projectId: "travel-website-login-page",
+        storageBucket: "travel-website-login-page.appspot.com",
+        messagingSenderId: "455474636612",
+        appId: "1:455474636612:web:7bddfe06b6e2d859589911",
+        measurementId: "G-YJD8LYMXXL",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // Check if user is logged in
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, show email
+          document.getElementById(
+            "greeting"
+          ).innerText = `Welcome, ${user.email}`;
+        } else {
+          // No user is signed in, redirect to login page
+          window.location.href = "index.html";
+        }
+      });
+
+      // Logout function
+      window.logout = async function () {
+        await signOut(auth);
+        window.location.href = "index.html"; // Redirect to login page
+      };
+    </script>
+
+    <!-- Google Maps API script with Places library (load at end of body) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIxaTQmywOJkn51QdU0zneqjJZvuzktsk&libraries=places&callback=initAutocomplete" async defer></script>
+
+    <script>
+      // Initialize date range picker
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize date range picker
+        flatpickr("#dateRange", {
+          mode: "range",
+          minDate: "today",
+          dateFormat: "Y-m-d",
+          altInput: true,
+          altFormat: "F j, Y",
+          showMonths: 2
+        });
+        
+        // Setup search button
+        document.getElementById('searchBtn').addEventListener('click', searchTrips);
+        
+        // Setup geolocation detection
+        document.getElementById('detectLocationBtn').addEventListener('click', detectCurrentLocation);
+      });
+
+      // Function to initialize Google Places Autocomplete
+      function initAutocomplete() {
+        // Source location autocomplete
+        const sourceInput = document.getElementById('sourceLocation');
+        new google.maps.places.Autocomplete(sourceInput, {
+          types: ['(cities)']
+        });
+        
+        // Destination location autocomplete
+        const destInput = document.getElementById('destinationLocation');
+        new google.maps.places.Autocomplete(destInput, {
+          types: ['(cities)']
+        });
+      }
+      window.initAutocomplete = initAutocomplete;
+
+      // Detect current location using browser's geolocation API
+      function detectCurrentLocation() {
+        const statusDiv = document.getElementById('locationStatus');
+        statusDiv.textContent = "Detecting your location...";
+        statusDiv.className = "text-xs text-blue-500 h-4";
+        
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              // Success callback
+              const { latitude, longitude } = position.coords;
+              
+              // Use Google's Geocoding API to convert coordinates to address
+              const geocoder = new google.maps.Geocoder();
+              const latlng = { lat: latitude, lng: longitude };
+              
+              geocoder.geocode({ location: latlng }, (results, status) => {
+                if (status === 'OK') {
+                  if (results[0]) {
+                    // Find the city component from the address
+                    let city = '';
+                    for (let component of results[0].address_components) {
+                      if (component.types.includes('locality')) {
+                        city = component.long_name;
+                        break;
+                      }
+                    }
+                    
+                    // If no city was found, use a broader component
+                    if (!city) {
+                      for (let component of results[0].address_components) {
+                        if (component.types.includes('administrative_area_level_1')) {
+                          city = component.long_name;
+                          break;
+                        }
+                      }
+                    }
+                    
+                    // Update the source location input
+                    document.getElementById('sourceLocation').value = city || results[0].formatted_address;
+                    statusDiv.textContent = "Location detected successfully";
+                    statusDiv.className = "text-xs text-green-500 h-4";
+                  } else {
+                    statusDiv.textContent = "No results found";
+                    statusDiv.className = "text-xs text-red-500 h-4";
+                  }
+                } else {
+                  statusDiv.textContent = "Geocoder failed due to: " + status;
+                  statusDiv.className = "text-xs text-red-500 h-4";
+                }
+              });
+            },
+            (error) => {
+              // Error callback
+              let errorMessage = "";
+              switch(error.code) {
+                case error.PERMISSION_DENIED:
+                  errorMessage = "Location access denied. Please enter your location manually.";
+                  break;
+                case error.POSITION_UNAVAILABLE:
+                  errorMessage = "Location information unavailable. Please enter manually.";
+                  break;
+                case error.TIMEOUT:
+                  errorMessage = "Location request timed out. Please try again.";
+                  break;
+                default:
+                  errorMessage = "An unknown error occurred.";
+              }
+              statusDiv.textContent = errorMessage;
+              statusDiv.className = "text-xs text-red-500 h-4";
+            }
+          );
+        } else {
+          statusDiv.textContent = "Geolocation is not supported by your browser.";
+          statusDiv.className = "text-xs text-red-500 h-4";
+        }
+      }
+
+      // Search trips function
+      function searchTrips() {
+        const source = document.getElementById('sourceLocation').value;
+        const destination = document.getElementById('destinationLocation').value;
+        const dates = document.getElementById('dateRange').value;
+        
+        if (!source || !destination || !dates) {
+          alert("Please fill in all fields to search for trips");
+          return;
+        }
+        
+        // In a real app, you would submit this data to your backend or navigate to results page
+        alert(`Searching for trips:\nFrom: ${source}\nTo: ${destination}\nDates: ${dates}`);
+        
+        // You can redirect to a results page or handle the search as needed
+        // window.location.href = `results.html?from=${encodeURIComponent(source)}&to=${encodeURIComponent(destination)}&dates=${encodeURIComponent(dates)}`;
+      }
+    </script>
+  </body>
+</html>
