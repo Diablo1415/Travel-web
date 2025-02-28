@@ -15,16 +15,9 @@
                 <h1 class="text-2xl font-bold text-gray-800">TripNext</h1>
             </div>
             
-            <nav class="hidden md:flex space-x-8">
-                <a href="#" class="text-gray-800 hover:text-orange-500 font-medium">Discover</a>
-                <a href="#" class="text-gray-800 hover:text-orange-500 font-medium">Trips</a>
-                <a href="#" class="text-gray-800 hover:text-orange-500 font-medium">Review</a>
-                <a href="#" class="text-gray-800 hover:text-orange-500 font-medium">Forums</a>
-            </nav>
-            
             <div class="flex items-center space-x-4">
-                <div class="font-medium">INR</div>
-                <div id="userGreeting" class="hidden md:block">Welcome</div>
+            
+                <div id="userGreeting" class="hidden md:block"> </div>
                 <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">Sign out</button>
             </div>
         </div>
@@ -34,7 +27,7 @@
     <main class="container mx-auto px-4 py-8">
         <!-- Hero Section with Search -->
         <section class="mb-12 text-center">
-            <h2 class="text-4xl font-bold mb-8">Where to?</h2>
+            
             
             <div class="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
                 <!-- Search Categories -->
@@ -47,9 +40,7 @@
                         <i class="fas fa-hotel"></i>
                         <span>Hotels</span>
                     </button>
-                    <button class="px-4 py-2 m-1 flex items-center space-x-2 hover:text-orange-500">
-                        <i class="fas fa-map-marked-alt"></i>
-                        <span>Things to Do</span>
+                    
                     </button>
                     <button class="px-4 py-2 m-1 flex items-center space-x-2 hover:text-orange-500">
                         <i class="fas fa-utensils"></i>
@@ -59,10 +50,7 @@
                         <i class="fas fa-plane"></i>
                         <span>Flights</span>
                     </button>
-                    <button class="px-4 py-2 m-1 flex items-center space-x-2 hover:text-orange-500">
-                        <i class="fas fa-home"></i>
-                        <span>Holiday Homes</span>
-                    </button>
+                    
                 </div>
                 
                 <!-- Search Bar -->
@@ -102,32 +90,7 @@
                 </div>
             </div>
         </section>
-        
-        <!-- AI Powered Trip Planner Section -->
-        <section class="mb-12">
-            <div class="bg-green-400 rounded-lg shadow-lg overflow-hidden">
-                <div class="flex flex-col md:flex-row">
-                    <div class="md:w-1/2 p-8 flex flex-col justify-center">
-                        <div class="mb-2 inline-flex items-center">
-                            <span class="text-white text-sm font-medium mr-2">Powered by AI</span>
-                            <span class="bg-black text-white text-xs px-2 py-1 rounded">BETA</span>
-                        </div>
-                        <h3 class="text-3xl font-bold text-white mb-4">Plan a trip that's so you</h3>
-                        <p class="text-white text-lg mb-4">From historical monuments to forest adventures—get custom recommendations for whatever you're into.</p>
-                        <button class="bg-white text-green-600 hover:bg-gray-100 font-bold py-3 px-6 rounded-lg w-full md:w-auto inline-flex items-center justify-center">
-                            <span>Get started</span>
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-                    <div class="md:w-1/2 flex">
-                        <div class="w-1/3 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/150x300?text=Image1')"></div>
-                        <div class="w-1/3 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/150x300?text=Image2')"></div>
-                        <div class="w-1/3 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/150x300?text=Image3')"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
+    
         <!-- Popular Destinations -->
         <section>
             <h3 class="text-2xl font-bold mb-6">Popular Destinations</h3>
@@ -136,8 +99,8 @@
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="h-48 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=Paris')"></div>
                     <div class="p-4">
-                        <h4 class="font-bold text-xl mb-2">Paris</h4>
-                        <p class="text-gray-700 mb-4">Experience the city of love and lights.</p>
+                        <h4 class="font-bold text-xl mb-2">Kerala</h4>
+                        <p class="text-gray-700 mb-4">Known as "God's Own Country," Kerala is famous for its lush greenery, serene backwaters, and diverse wildlife. This southwestern state is a haven for nature lovers and adventure seekers alike. With its rich cultural heritage, traditional dance forms like Kathakali, and delectable cuisine, Kerala offers a unique and enchanting experience for every traveler.</p>
                         <div class="flex justify-between items-center">
                             <div class="text-sm text-gray-600">Popular for: Arts, Culture, Food</div>
                             <a href="#" class="text-orange-500 hover:text-orange-600">Explore</a>
@@ -149,8 +112,8 @@
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="h-48 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=Tokyo')"></div>
                     <div class="p-4">
-                        <h4 class="font-bold text-xl mb-2">Tokyo</h4>
-                        <p class="text-gray-700 mb-4">Discover the perfect blend of tradition and modernity.</p>
+                        <h4 class="font-bold text-xl mb-2">Agra</h4>
+                        <p class="text-gray-700 mb-4">Did you know? Agra is home to the magnificent Taj Mahal, one of the Seven Wonders of the World. Built by Emperor Shah Jahan in memory of his beloved wife Mumtaz Mahal, this marble masterpiece attracts millions of visitors each year. Agra’s rich history, stunning Mughal architecture, and vibrant culture make it a must-visit destination!</p>
                         <div class="flex justify-between items-center">
                             <div class="text-sm text-gray-600">Popular for: Technology, Shopping, Cuisine</div>
                             <a href="#" class="text-orange-500 hover:text-orange-600">Explore</a>
@@ -162,8 +125,8 @@
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="h-48 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/400x250?text=New+York')"></div>
                     <div class="p-4">
-                        <h4 class="font-bold text-xl mb-2">New York</h4>
-                        <p class="text-gray-700 mb-4">Explore the vibrant city that never sleeps.</p>
+                        <h4 class="font-bold text-xl mb-2">Mumbai</h4>
+                        <p class="text-gray-700 mb-4">Mumbai, the financial capital of India, is known for its fast-paced lifestyle, iconic landmarks like the Gateway of India, and Bollywood, the world's largest film industry. From bustling markets to serene marine drives, Mumbai offers a dynamic mix of culture, history, and modernity.</p>
                         <div class="flex justify-between items-center">
                             <div class="text-sm text-gray-600">Popular for: Entertainment, Museums, Skyline</div>
                             <a href="#" class="text-orange-500 hover:text-orange-600">Explore</a>
@@ -182,6 +145,9 @@
             onAuthStateChanged,
             signOut,
         } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+
+
 
         // Firebase Config
         const firebaseConfig = {
@@ -202,7 +168,7 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is signed in, show email
-                document.getElementById("userGreeting").innerText = `Welcome, ${user.email}`;
+                document.getElementById("userGreeting").innerText = Welcome, ${user.email};
                 document.getElementById("userGreeting").classList.remove("hidden");
             } else {
                 // No user is signed in, redirect to login page
