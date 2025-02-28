@@ -216,6 +216,11 @@ setInterval(changeBackground, 3700);
         // Setup search button
         document.getElementById('searchBtn').addEventListener('click', searchTrips);
         
+        // Setup explore button
+        document.getElementById('exploreBtn').addEventListener('click', function() {
+          window.location.href = "dashboard.html";
+        });
+        
         // Setup geolocation detection
         document.getElementById('detectLocationBtn').addEventListener('click', detectCurrentLocation);
       });
@@ -325,11 +330,13 @@ setInterval(changeBackground, 3700);
           return;
         }
         
-        // In a real app, you would submit this data to your backend or navigate to results page
-        alert(`Searching for trips:\nFrom: ${source}\nTo: ${destination}\nDates: ${dates}`);
+        // Store search parameters in localStorage for the dashboard to access
+        localStorage.setItem('tripSource', source);
+        localStorage.setItem('tripDestination', destination);
+        localStorage.setItem('tripDates', dates);
         
-        // You can redirect to a results page or handle the search as needed
-        // window.location.href = `results.html?from=${encodeURIComponent(source)}&to=${encodeURIComponent(destination)}&dates=${encodeURIComponent(dates)}`;
+        // Redirect to dashboard page
+        window.location.href = "dashboard.html";
       }
     </script>
   </body>
