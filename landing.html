@@ -12,6 +12,21 @@
       .pac-container {
         z-index: 1051 !important;
       }
+      
+      /* Added styles for nearby places container */
+      #nearbyPlacesContainer {
+        display: none;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      
+      .place-card {
+        transition: transform 0.3s ease;
+      }
+      
+      .place-card:hover {
+        transform: translateY(-5px);
+      }
     </style>
   </head>
   <body
@@ -111,6 +126,30 @@
         </div>
       </div>
       
+      <!-- Added new container for nearby places -->
+      <div id="nearbyPlacesContainer" class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg text-black mb-6 mt-8">
+        <h2 class="text-2xl font-bold mb-4">Places to Visit Nearby</h2>
+        <p id="currentLocationDisplay" class="text-lg font-medium mb-4">Loading...</p>
+        
+        <div id="loadingPlaces" class="flex justify-center py-4">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+        
+        <div id="placesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Places will be dynamically inserted here -->
+        </div>
+        
+        <div class="mt-6">
+          <button
+            id="backToSearchBtn"
+            class="w-full bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 text-lg rounded-lg font-bold transition-colors"
+          >
+            Back to Search
+          </button>
+        </div>
+      </div>
+    </div>
+      
     <script type="module">
       // Import Firebase Modules
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
@@ -180,6 +219,11 @@ setInterval(changeBackground, 3700);
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIxaTQmywOJkn51QdU0zneqjJZvuzktsk&libraries=places&callback=initAutocomplete" async defer></script>
 
     <script>
+      // Global variables to store location data
+      let currentLat, currentLng, currentCity;
+      let placesService;
+      let map; // We'll use this for the Places service
+
       // Initialize date range picker
       document.addEventListener('DOMContentLoaded', function() {
         // Initialize date range picker
@@ -194,7 +238,19 @@ setInterval(changeBackground, 3700);
         
         // Setup search button
         document.getElementById('searchBtn').addEventListener('click', function() {
-          window.location.href = "dashboard.html";
+          // Check if source location is set
+          const sourceLocation = document.getElementById('sourceLocation').value;
+          if (sourceLocation) {
+            // If we have a map and current coordinates, show nearby places
+            if (currentLat && currentLng && currentCity) {
+              showNearbyPlaces();
+            } else {
+              // Try to geocode the entered location
+              geocodeAndShowPlaces(sourceLocation);
+            }
+          } else {
+            alert("Please enter or detect your current location first");
+          }
         });
         
         // Setup explore button
@@ -203,16 +259,30 @@ setInterval(changeBackground, 3700);
         });
 
         // Setup book now button
-        document.getElementById('bookBtn').addeventListener('click', function() {
+        document.getElementById('bookBtn').addEventListener('click', function() {
           window.location.href = "script.js";
         });
         
         // Setup geolocation detection
         document.getElementById('detectLocationBtn').addEventListener('click', detectCurrentLocation);
+        
+        // Setup back button
+        document.getElementById('backToSearchBtn').addEventListener('click', function() {
+          document.getElementById('nearbyPlacesContainer').style.display = 'none';
+        });
       });
 
       // Function to initialize Google Places Autocomplete
       function initAutocomplete() {
+        // Create a map object (hidden) for Places service
+        map = new google.maps.Map(document.createElement('div'), {
+          center: { lat: -34.397, lng: 150.644 },
+          zoom: 8
+        });
+        
+        // Initialize Places service
+        placesService = new google.maps.places.PlacesService(map);
+        
         // Source location autocomplete
         const sourceInput = document.getElementById('sourceLocation');
         new google.maps.places.Autocomplete(sourceInput, {
@@ -227,6 +297,42 @@ setInterval(changeBackground, 3700);
       }
       window.initAutocomplete = initAutocomplete;
 
+      // Geocode location string and show places
+      function geocodeAndShowPlaces(locationString) {
+        const geocoder = new google.maps.Geocoder();
+        
+        geocoder.geocode({ address: locationString }, (results, status) => {
+          if (status === 'OK' && results[0]) {
+            currentLat = results[0].geometry.location.lat();
+            currentLng = results[0].geometry.location.lng();
+            
+            // Find city name
+            let city = '';
+            for (let component of results[0].address_components) {
+              if (component.types.includes('locality')) {
+                city = component.long_name;
+                break;
+              }
+            }
+            
+            // If no city was found, use a broader component
+            if (!city) {
+              for (let component of results[0].address_components) {
+                if (component.types.includes('administrative_area_level_1')) {
+                  city = component.long_name;
+                  break;
+                }
+              }
+            }
+            
+            currentCity = city || locationString;
+            showNearbyPlaces();
+          } else {
+            alert("Could not find the location. Please try again.");
+          }
+        });
+      }
+
       // Detect current location using browser's geolocation API
       function detectCurrentLocation() {
         const statusDiv = document.getElementById('locationStatus');
@@ -237,11 +343,12 @@ setInterval(changeBackground, 3700);
           navigator.geolocation.getCurrentPosition(
             (position) => {
               // Success callback
-              const { latitude, longitude } = position.coords;
+              currentLat = position.coords.latitude;
+              currentLng = position.coords.longitude;
               
               // Use Google's Geocoding API to convert coordinates to address
               const geocoder = new google.maps.Geocoder();
-              const latlng = { lat: latitude, lng: longitude };
+              const latlng = { lat: currentLat, lng: currentLng };
               
               geocoder.geocode({ location: latlng }, (results, status) => {
                 if (status === 'OK') {
@@ -265,8 +372,10 @@ setInterval(changeBackground, 3700);
                       }
                     }
                     
+                    currentCity = city || results[0].formatted_address;
+                    
                     // Update the source location input
-                    document.getElementById('sourceLocation').value = city || results[0].formatted_address;
+                    document.getElementById('sourceLocation').value = currentCity;
                     statusDiv.textContent = "Location detected successfully";
                     statusDiv.className = "text-xs text-green-500 h-4";
                   } else {
@@ -303,6 +412,107 @@ setInterval(changeBackground, 3700);
           statusDiv.textContent = "Geolocation is not supported by your browser.";
           statusDiv.className = "text-xs text-red-500 h-4";
         }
+      }
+
+      // Show nearby places based on current location
+      function showNearbyPlaces() {
+        // Update UI
+        document.getElementById('currentLocationDisplay').textContent = `Top Places to Visit in ${currentCity}`;
+        document.getElementById('loadingPlaces').style.display = 'flex';
+        document.getElementById('placesGrid').innerHTML = '';
+        document.getElementById('nearbyPlacesContainer').style.display = 'block';
+        
+        // Create request for Places API
+        const request = {
+          location: { lat: currentLat, lng: currentLng },
+          radius: '5000', // 5 kilometers
+          type: ['tourist_attraction'], // Focus on tourist attractions
+          rankBy: google.maps.places.RankBy.PROMINENCE
+        };
+        
+        // Send request to Places API
+        placesService.nearbySearch(request, (results, status) => {
+          document.getElementById('loadingPlaces').style.display = 'none';
+          
+          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+            // Display top places (limited to 9 for clean display)
+            const placesToShow = results.slice(0, 9);
+            
+            // Create HTML for places
+            placesToShow.forEach(place => {
+              createPlaceCard(place);
+            });
+          } else {
+            document.getElementById('placesGrid').innerHTML = `
+              <div class="col-span-full text-center p-4">
+                <p class="text-lg">No tourist attractions found nearby. Try expanding your search or exploring other categories.</p>
+              </div>
+            `;
+          }
+        });
+      }
+
+      // Create a card for each place
+      function createPlaceCard(place) {
+        const placesGrid = document.getElementById('placesGrid');
+        
+        // Fallback image if none available
+        const photoUrl = place.photos && place.photos[0] ? 
+          place.photos[0].getUrl({ maxWidth: 300, maxHeight: 200 }) : 
+          'https://via.placeholder.com/300x200?text=No+Image';
+        
+        // Get place rating
+        const rating = place.rating || 'N/A';
+        const ratingStars = generateRatingStars(rating);
+        
+        // Create card HTML
+        const placeCard = document.createElement('div');
+        placeCard.className = 'place-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg';
+        placeCard.innerHTML = `
+          <img src="${photoUrl}" alt="${place.name}" class="w-full h-40 object-cover">
+          <div class="p-4">
+            <h3 class="font-bold text-lg mb-1">${place.name}</h3>
+            <div class="text-yellow-500 mb-2">${ratingStars} <span class="text-gray-600">(${place.user_ratings_total || 0})</span></div>
+            <p class="text-gray-600 text-sm mb-2">${place.vicinity || 'Address unavailable'}</p>
+            <div class="mt-3">
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}&query_place_id=${place.place_id}" 
+                 target="_blank" 
+                 class="text-blue-500 hover:text-blue-700 text-sm font-medium">
+                View on Maps →
+              </a>
+            </div>
+          </div>
+        `;
+        
+        placesGrid.appendChild(placeCard);
+      }
+
+      // Generate star rating display
+      function generateRatingStars(rating) {
+        if (rating === 'N/A') return 'No ratings yet';
+        
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+        
+        let starsHTML = '';
+        
+        // Add full stars
+        for (let i = 0; i < fullStars; i++) {
+          starsHTML += '★';
+        }
+        
+        // Add half star if needed
+        if (halfStar) {
+          starsHTML += '★';
+        }
+        
+        // Add empty stars
+        for (let i = 0; i < emptyStars; i++) {
+          starsHTML += '☆';
+        }
+        
+        return starsHTML;
       }
 
       // Search trips function
