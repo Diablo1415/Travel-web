@@ -51,7 +51,8 @@ function findNearbyAttractions(latitude, longitude) {
     const minimumRating = 4.0;
 
     // Construct the API URL
-    const searchURL = https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${searchRadius}&type=${placeType}&key=${GOOGLE_MAPS_API_KEY};
+    const searchURL = https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${searchRadius}&type=${placeType}&key=${AIzaSyAIxaTQmywOJkn51QdU0zneqjJZvuzktsk
+};
 
     // Make the API request
     fetch(searchURL)
@@ -85,7 +86,8 @@ function showAttractionResults(attractions) {
 
         // Get the attraction photo or use a placeholder
         const photoUrl = attraction.photos 
-            ? https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${attraction.photos[0].photo_reference}&key=${GOOGLE_MAPS_API_KEY} 
+            ? https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${attraction.photos[0].photo_reference}&key=${AIzaSyAIxaTQmywOJkn51QdU0zneqjJZvuzktsk
+} 
             : 'https://via.placeholder.com/300';
 
         // Build the card HTML
@@ -115,7 +117,8 @@ function showAttractionResults(attractions) {
  */
 function calculateTravelTime(destinationLat, destinationLng, attractionId) {
     // Construct the API URL
-    const travelTimeURL = https://maps.googleapis.com/maps/api/distancematrix/json?origins=${userLatitude},${userLongitude}&destinations=${destinationLat},${destinationLng}&mode=driving&key=${GOOGLE_MAPS_API_KEY};
+    const travelTimeURL = https://maps.googleapis.com/maps/api/distancematrix/json?origins=${userLatitude},${userLongitude}&destinations=${destinationLat},${destinationLng}&mode=driving&key=$AIzaSyAIxaTQmywOJkn51QdU0zneqjJZvuzktsk
+};
 
     // Make the API request
     fetch(travelTimeURL)
