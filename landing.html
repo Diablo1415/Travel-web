@@ -186,13 +186,11 @@ setInterval(changeBackground, 3700);
         });
         
         // Setup search button
-        document.getElementById('searchBtn').addEventListener('click', function() {
-          window.location.href = "dashboard.html";
-        });
-         
+        document.getElementById('searchBtn').addEventListener('click', searchTrips);
+        
         // Setup explore button
         document.getElementById('exploreBtn').addEventListener('click', function() {
-          window.location.href = "dashboard19.html";
+          window.location.href = "dashboard.html";
         });
         
         // Setup geolocation detection
