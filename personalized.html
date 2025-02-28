@@ -1,0 +1,87 @@
+let userLat, userLng;
+
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+        alert("Geolocation is not supported by your browser.");
+    }
+}
+
+function success(position) {
+    userLat = position.coords.latitude;
+    userLng = position.coords.longitude;
+    fetchNearbyPlaces(userLat, userLng);
+}
+
+function error() {
+    alert("Unable to retrieve your location. Please enable location services.");
+}
+
+function fetchNearbyPlaces(lat, lng) {
+    let apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+    let radius = 5000; // 5km radius
+    let type = "tourist_attraction"; // Fetch only tourist spots
+
+    let url = https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${apiKey};
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        let filteredPlaces = data.results.filter(place => place.rating >= 4.0); // Filter by rating 4.0+
+        displayPlaces(filteredPlaces);
+    })
+    .catch(error => console.log("Error fetching places:", error));
+}
+
+function displayPlaces(places) {
+    let container = document.getElementById("placesContainer");
+    container.innerHTML = ""; // Clear previous results
+
+    if (places.length === 0) {
+        container.innerHTML = "<p>No popular places found nearby.</p>";
+        return;
+    }
+
+    places.forEach(place => {
+        let div = document.createElement("div");
+        div.classList.add("place-card");
+
+        let photoUrl = place.photos 
+            ? https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=YOUR_GOOGLE_MAPS_API_KEY 
+            : 'https://via.placeholder.com/300';
+
+        div.innerHTML = `
+            <h3>${place.name} (⭐ ${place.rating})</h3>
+            <p>${place.vicinity}</p>
+            <img src="${photoUrl}" alt="${place.name}">
+            <p><strong>Estimated Travel Time:</strong> <span id="time-${place.place_id}">Calculating...</span></p>
+        `;
+
+        container.appendChild(div);
+
+        getTravelTime(place.geometry.location.lat, place.geometry.location.lng, place.place_id);
+    });
+
+    document.getElementById("personalizedPage").style.display = "block";
+}
+
+function getTravelTime(destLat, destLng, placeId) {
+    let apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+    let origin = ${userLat},${userLng};
+    let destination = ${destLat},${destLng};
+    
+    let url = https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&mode=driving&key=${apiKey};
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        let travelTimeElement = document.getElementById(time-${placeId});
+        if (data.rows[0].elements[0].status === "OK") {
+            travelTimeElement.innerText = data.rows[0].elements[0].duration.text;
+        } else {
+            travelTimeElement.innerText = "Unknown time";
+        }
+    })
+    .catch(error => console.log("Error fetching travel time:", error));
+}
