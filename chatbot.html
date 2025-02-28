@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek Chatbot Integration</title>
+    <style>
+        /* Chat icon styling */
+        .chat-icon-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none; /* Hidden by default, will be shown via JavaScript if not index page */
+        }
+        
+        .chat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #2196F3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .chat-icon:hover {
+            transform: scale(1.05);
+            background-color: #0d8bf2;
+        }
+        
+        .chat-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+        
+        /* Chat window styling */
+        .chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        .close-chat {
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .chat-iframe-container {
+            flex-grow: 1;
+            border: none;
+        }
+        
+        /* Animation for chat window */
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .chat-window.active {
+            display: flex;
+            animation: slideIn 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Your website content here -->
+    
+    <!-- Chat icon button -->
+    <div class="chat-icon-container" id="chatIconContainer">
+        <div class="chat-icon" id="chatIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+                <path d="M7 9h10M7 12h7" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Chat window -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>Travel Assistant</h3>
+            <button class="close-chat" id="closeChat">✕</button>
+        </div>
+        <div class="chat-iframe-container" id="chatIframeContainer">
+            <!-- DeepSeek chat interface will be loaded here -->
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Your DeepSeek API key
+            const deepSeekApiKey = 'sk-2c7e8fda6c254eb0bbf5f4edf1493202'; // Replace with your actual API key
+            
+            // Check if current page is the index page
+            const isIndexPage = window.location.pathname === '/' || 
+                                window.location.pathname === '/index.html' || 
+                                window.location.pathname.endsWith('/index.html') || 
+                                window.location.pathname === '/index.php';
+            
+            const chatIconContainer = document.getElementById('chatIconContainer');
+            const chatIcon = document.getElementById('chatIcon');
+            const chatWindow = document.getElementById('chatWindow');
+            const closeChat = document.getElementById('closeChat');
+            const chatIframeContainer = document.getElementById('chatIframeContainer');
+            
+            // Only show the chat icon if not on index page
+            if (!isIndexPage) {
+                chatIconContainer.style.display = 'block';
+            }
+            
+            // Toggle chat window when icon is clicked
+            chatIcon.addEventListener('click', function() {
+                chatWindow.classList.add('active');
+                
+                // Only load the DeepSeek chat interface if it hasn't been loaded yet
+                if (!chatIframeContainer.querySelector('iframe')) {
+                    loadDeepSeekChat();
+                }
+            });
+            
+            // Close chat window
+            closeChat.addEventListener('click', function() {
+                chatWindow.classList.remove('active');
+            });
+            
+            // Function to load DeepSeek chat interface
+            function loadDeepSeekChat() {
+                // Create an iframe to load the DeepSeek chat interface
+                const chatIframe = document.createElement('iframe');
+                chatIframe.style.width = '100%';
+                chatIframe.style.height = '100%';
+                chatIframe.style.border = 'none';
+                
+                // Configure DeepSeek chat options
+                const chatConfig = {
+                    apiKey: deepSeekApiKey,
+                    theme: 'light',
+                    welcomeMessage: 'Hello! I can help you plan your travel. Ask me anything about destinations, accommodations, or travel tips!',
+                    // Add any other configuration options for DeepSeek here
+                };
+                
+                // This is a placeholder URL - replace with the actual DeepSeek embed URL
+                chatIframe.src = `https://chat.deepseek.com/embed?config=${encodeURIComponent(JSON.stringify(chatConfig))}`;
+                
+                chatIframeContainer.appendChild(chatIframe);
+            }
+        });
+    </script>
+</body>
+</html>
